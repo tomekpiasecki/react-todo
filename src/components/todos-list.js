@@ -1,5 +1,7 @@
 import React from 'react'
+import shortid from 'shortid'
 import ToDosListHeader from './todos-list-header'
+import ToDosListItem from './todos-list-item'
 
 class ToDosList extends React.Component {
     constructor() {
@@ -7,18 +9,17 @@ class ToDosList extends React.Component {
         this.state = {
             todos: [
                 {
+                    id: shortid.generate(),
                     task: 'Walk the dog',
                     isCompleted: true
                 },
                 {
+                    id: shortid.generate(),
                     task: 'clean the desk',
                     isCompleted: false
                 }
             ]
         }
-    }
-    getTaskClasses(todo) {
-        return `task ${todo.isCompleted ? 'completed' : ''}`
     }
     render() {
         return (
@@ -27,11 +28,12 @@ class ToDosList extends React.Component {
                     columns = {['Tasks', 'Actions']}
                 />
                 <tbody>
-                    {this.state.todos.map((todo, index) => 
-                        <tr key={'todo_' + index}>
-                            <td className={this.getTaskClasses(todo)}>{todo.task}</td>
-                            <td className="actions">{todo.task} - actions</td>
-                        </tr>
+                    {this.state.todos.map(todo => 
+                        <ToDosListItem
+                            task = {todo.task}
+                            isCompleted = {todo.isCompleted}
+                            key = {todo.id}
+                        />
                     )}
                 </tbody>
             </table>
