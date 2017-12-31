@@ -6,8 +6,8 @@ class ToDosListHeader extends React.Component {
         return (
             <thead>
                 <tr>
-                    {this.props.columns.map((column, index) =>
-                        <th key={'column_' + index}>{column}</th>
+                    {this.props.columns.map(column =>
+                        <th key={column}>{column}</th>
                     )}
                 </tr>
             </thead>
