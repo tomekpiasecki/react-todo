@@ -4,6 +4,14 @@ import ToDosListHeader from './todos-list-header'
 import ToDosListItem from './todos-list-item'
 
 class ToDosList extends React.Component {
+    renderItems() {
+        return this.props.todos.map(todo => 
+            <ToDosListItem
+                key = {todo.id}
+                {...todo}
+            />
+        )
+    }
     render() {
         return (
             <table>
@@ -11,13 +19,7 @@ class ToDosList extends React.Component {
                     columns = {['Tasks', 'Actions']}
                 />
                 <tbody>
-                    {this.props.todos.map(todo => 
-                        <ToDosListItem
-                            task = {todo.task}
-                            isCompleted = {todo.isCompleted}
-                            key = {todo.id}
-                        />
-                    )}
+                    {this.renderItems()}
                 </tbody>
             </table>
         )
