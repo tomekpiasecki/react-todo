@@ -16,7 +16,8 @@
   "homepage": "https://bitbucket.org/piaseq/react-training-todo#readme",
   "dependencies": {
     "react": "^16.2.0",
-    "react-dom": "^16.2.0"
+    "react-dom": "^16.2.0",
+    "shortid": "^2.2.8"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
