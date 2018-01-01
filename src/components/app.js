@@ -24,7 +24,9 @@ class App extends React.Component {
         }
 
         this.onCreateTodo = this.onCreateTodo.bind(this)
+        this.onDeleteTodo = this.onDeleteTodo.bind(this)
     }
+
     onCreateTodo(task) {
         this.setState({
             todos: this.state.todos.concat(
@@ -36,12 +38,20 @@ class App extends React.Component {
             )
         })
     }
+
+    onDeleteTodo(id) {
+        this.setState({todos: this.state.todos.filter(todo => todo.id !== id)})
+    }
+
     render() {
         return (
             <div>
                 <h1>React ToDos app</h1>
                 <CreateToDo onCreateToDo={this.onCreateTodo} />
-                <ToDosList todos={this.state.todos} />
+                <ToDosList
+                    todos = {this.state.todos}
+                    onDeleteItem = {this.onDeleteTodo}
+                />
             </div>
         )
     }
