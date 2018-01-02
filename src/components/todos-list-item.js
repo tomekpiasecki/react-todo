@@ -15,7 +15,6 @@ class ToDosListItem extends React.Component {
         this.onEditClick = this.onEditClick.bind(this)
         this.onSaveClick = this.onSaveClick.bind(this)
         this.onTaskChange = this.onTaskChange.bind(this)
-        this.onTaskClick = this.onTaskClick.bind(this)
     }
 
     getTaskClasses() {
@@ -61,15 +60,6 @@ class ToDosListItem extends React.Component {
         this.setState({newValue: e.target.value})
     }
 
-    onTaskClick(e) {
-        const {id, onTaskClick} = this.props
-
-        e.preventDefault()
-        if (onTaskClick) {
-            onTaskClick(id)
-        }
-    }
-
     renderAcstionsSection() {
         if (this.state.isBeingEdited) {
             return <td className="actions">
@@ -94,7 +84,7 @@ class ToDosListItem extends React.Component {
     }
 
     renderTask() {
-        const {task} = this.props
+        const {id:taskId, task, onTaskClick} = this.props
 
         if (this.state.isBeingEdited) {
             return <td className={this.getTaskClasses()}>
@@ -103,7 +93,7 @@ class ToDosListItem extends React.Component {
             </td>
         }
 
-        return <td className={this.getTaskClasses()} onClick={this.onTaskClick}>{task}</td>
+        return <td className={this.getTaskClasses()} onClick={onTaskClick.bind(this, taskId)}>{task}</td>
     }
 
     render() {
@@ -122,7 +112,7 @@ ToDosListItem.propTypes = {
     isCompleted: PropTypes.bool,
     onDeleteHandler: PropTypes.func,
     onSaveHandler: PropTypes.func,
-    onTaskClick: PropTypes.func
+    onTaskClick: PropTypes.func.isRequired
 }
 
 ToDosListItem.defaultProps = {
