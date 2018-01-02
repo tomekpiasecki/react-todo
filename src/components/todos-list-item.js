@@ -11,7 +11,6 @@ class ToDosListItem extends React.Component {
         }
 
         this.onCancelClick = this.onCancelClick.bind(this)
-        this.onDeleteClick = this.onDeleteClick.bind(this)
         this.onEditClick = this.onEditClick.bind(this)
         this.onSaveClick = this.onSaveClick.bind(this)
         this.onTaskChange = this.onTaskChange.bind(this)
@@ -30,13 +29,6 @@ class ToDosListItem extends React.Component {
             isBeingEdited: true,
             newValue: this.props.task
         })
-    }
-
-    onDeleteClick() {
-        const {onDeleteHandler, id} = this.props
-        if (confirm('Are you sure?') && onDeleteHandler) {
-            onDeleteHandler(id)
-        }
     }
 
     onSaveClick() {
@@ -68,9 +60,11 @@ class ToDosListItem extends React.Component {
             </td>
         }
 
+        const {onDeleteHandler, id:taskId} = this.props
+
         return <td className="actions">
             <button onClick={this.onEditClick}>Edit</button>
-            <button onClick={this.onDeleteClick}>Delete</button>
+            <button onClick={onDeleteHandler.bind(this, taskId)}>Delete</button>
         </td>
     }
 
@@ -110,7 +104,7 @@ ToDosListItem.propTypes = {
     task:  PropTypes.string.isRequired,
     id: PropTypes.string,
     isCompleted: PropTypes.bool,
-    onDeleteHandler: PropTypes.func,
+    onDeleteHandler: PropTypes.func.isRequired,
     onSaveHandler: PropTypes.func,
     onTaskClick: PropTypes.func.isRequired
 }

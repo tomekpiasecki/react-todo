@@ -50,7 +50,9 @@ class App extends React.Component {
     }
 
     onDeleteTodo(id) {
-        this.setState({todos: this.state.todos.filter(todo => todo.id !== id)})
+        if (confirm('Are you sure?')) {
+            this.setState({todos: this.state.todos.filter(todo => todo.id !== id)})
+        }
     }
 
     validateTodo(newValue) {
