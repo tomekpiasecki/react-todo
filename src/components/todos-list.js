@@ -12,6 +12,14 @@ class ToDosList extends React.Component {
         }
     }
 
+    onTaskClick(taskId) {
+        const {onTaskClick} = this.props
+
+        if (onTaskClick) {
+            onTaskClick(taskId)
+        }
+    }
+
     onTaskSave(taskId, newValue) {
         const {onTaskSave} = this.props
 
@@ -28,6 +36,7 @@ class ToDosList extends React.Component {
                 key = {todo.id}
                 onDeleteHandler = {this.onDeleteItem.bind(this)}
                 onSaveHandler = {this.onTaskSave.bind(this)}
+                onTaskClick = {this.onTaskClick.bind(this)}
                 {...todo}
             />
         )
@@ -50,6 +59,7 @@ class ToDosList extends React.Component {
 ToDosList.protoTypes - {
     todos: PropTypes.array.isRequired,
     onDeleteItem: PropTypes.func,
+    onTaskClick: PropTypes.func,
     onTaskSave: PropTypes.func
 }
 

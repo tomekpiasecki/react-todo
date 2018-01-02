@@ -26,6 +26,7 @@ class App extends React.Component {
         this.onCreateTodo = this.onCreateTodo.bind(this)
         this.onDeleteTodo = this.onDeleteTodo.bind(this)
         this.validateTodo = this.validateTodo.bind(this)
+        this.onTodoClick = this.onTodoClick.bind(this)
         this.onTodoSave = this.onTodoSave.bind(this)
     }
 
@@ -68,6 +69,17 @@ class App extends React.Component {
         return []
     }
 
+    onTodoClick(taskId) {
+        this.setState({
+            todos: this.state.todos.map(todo => {
+                todo.isCompleted = (todo.id === taskId ? !todo.isCompleted : todo.isCompleted)
+                return todo
+            })
+        })
+
+        return []
+    }
+
     onTodoSave(taskId, newValue) {
         const errors = this.validateTodo(newValue);
         if (errors.length) {
@@ -98,6 +110,7 @@ class App extends React.Component {
                 <ToDosList
                     todos = {this.state.todos}
                     onDeleteItem = {this.onDeleteTodo}
+                    onTaskClick = {this.onTodoClick}
                     onTaskSave = {this.onTodoSave}
                 />
             </div>

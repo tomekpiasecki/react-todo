@@ -1,0 +1,24 @@
+body {
+    text-align: center;
+}
+
+table {
+    margin: 0 auto;
+}
+
+form {
+    margin: 20px 0 40px;
+}
+
+.task,
+.error {
+    color: red;
+}
+
+.task {
+    cursor: pointer;
+}
+
+.task.completed {
+    color: green;
+}
