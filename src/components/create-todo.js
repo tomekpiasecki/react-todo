@@ -5,24 +5,48 @@ class CreateToDo extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            task: ''
+            task: '',
+            errors: []
         }
 
         this.handleChange = this.handleChange.bind(this)
         this.handleSubmit = this.handleSubmit.bind(this)
     }
+
     handleChange(e) {
         this.setState({task: e.target.value})
     }
+
     handleSubmit(e) {
         e.preventDefault()
-        this.props.onCreateToDo(this.state.task)
+
+        const {onCreateToDo} = this.props
+        const errors = onCreateToDo(this.state.task)
+        
+        this.setState({errors: errors})
+        
+        if (errors.length > 0) {
+            return
+        }
+
+        this.setState({task: ''})
     }
+
+    renderErrors() {
+        const errors = this.state.errors
+        if (errors.length === 0) {
+            return ''
+        }
+        
+        return <ul className="errors">{errors.map(error => <li key={error} className="error">{error}</li>)}</ul>
+    }
+
     render() {
         const {onCreateToDo} = this.props
         return (
             <form onSubmit={this.handleSubmit}>
-                <input type="text" onChange={this.handleChange} placeholder="what do you want to do"/>
+                {this.renderErrors()}
+                <input type="text" onChange={this.handleChange} value={this.state.task} placeholder="what do you want to do"/>
                 <button type="submit">Create task</button>
             </form>
         )

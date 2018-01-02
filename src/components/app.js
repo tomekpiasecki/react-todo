@@ -30,6 +30,11 @@ class App extends React.Component {
     }
 
     onCreateTodo(task) {
+        const errors = this.validateTodo(task);
+        if (errors.length) {
+            return errors
+        }
+
         this.setState({
             todos: this.state.todos.concat(
                 {
@@ -39,6 +44,8 @@ class App extends React.Component {
                 }
             )
         })
+
+        return []
     }
 
     onDeleteTodo(id) {
