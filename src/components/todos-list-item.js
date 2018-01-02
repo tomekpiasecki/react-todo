@@ -4,11 +4,17 @@ import PropTypes from 'prop-types'
 class ToDosListItem extends React.Component {
     constructor(props) {
         super(props)
-        this.state = {isBeingEdited: false}
+        this.state = {
+            isBeingEdited: false,
+            newValue: '',
+            errors: []
+        }
 
         this.onCancelClick = this.onCancelClick.bind(this)
         this.onDeleteClick = this.onDeleteClick.bind(this)
         this.onEditClick = this.onEditClick.bind(this)
+        this.onSaveClick = this.onSaveClick.bind(this)
+        this.onTaskChange = this.onTaskChange.bind(this)
     }
 
     getTaskClasses() {
@@ -20,7 +26,10 @@ class ToDosListItem extends React.Component {
     }
 
     onEditClick() {
-        this.setState({isBeingEdited: true})
+        this.setState({
+            isBeingEdited: true,
+            newValue: this.props.task
+        })
     }
 
     onDeleteClick() {
@@ -30,25 +39,67 @@ class ToDosListItem extends React.Component {
         }
     }
 
+    onSaveClick() {
+        const {onSaveHandler, id:taskId} = this.props
+        const {newValue} = this.state
+        let errors = []
+
+        if (onSaveHandler) {
+            errors = onSaveHandler(taskId, newValue)
+            this.setState({errors: errors})
+        }
+
+        if (errors.length > 0) {
+            return
+        }
+        
+        this.setState({isBeingEdited: false})
+    }
+
+    onTaskChange(e) {
+        this.setState({newValue: e.target.value})
+    }
+
     renderAcstionsSection() {
         if (this.state.isBeingEdited) {
             return <td className="actions">
                 <button onClick={this.onCancelClick}>Cancel</button>
-                <button>Save</button>
+                <button onClick={this.onSaveClick}>Save</button>
             </td>
         }
+
         return <td className="actions">
             <button onClick={this.onEditClick}>Edit</button>
             <button onClick={this.onDeleteClick}>Delete</button>
         </td>
     }
 
-    render() {
+    renderErrors() {
+        const errors = this.state.errors
+        if (errors.length === 0) {
+            return ''
+        }
+        
+        return <ul className="errors">{errors.map(error => <li key={error} className="error">{error}</li>)}</ul>
+    }
+
+    renderTask() {
         const {task} = this.props
 
+        if (this.state.isBeingEdited) {
+            return <td className={this.getTaskClasses()}>
+                <input type="text" value={this.state.newValue} onChange={this.onTaskChange}/>
+                {this.renderErrors()}
+            </td>
+        }
+
+        return <td className={this.getTaskClasses()}>{task}</td>
+    }
+
+    render() {
         return (
             <tr>
-                <td className={this.getTaskClasses()}>{task}</td>
+                {this.renderTask()}
                 {this.renderAcstionsSection()}
             </tr>
         )
@@ -59,7 +110,8 @@ ToDosListItem.propTypes = {
     task:  PropTypes.string.isRequired,
     id: PropTypes.string,
     isCompleted: PropTypes.bool,
-    onDeleteHandler: PropTypes.func
+    onDeleteHandler: PropTypes.func,
+    onSaveHandler: PropTypes.func,
 }
 
 ToDosListItem.defaultProps = {

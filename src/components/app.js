@@ -25,6 +25,8 @@ class App extends React.Component {
 
         this.onCreateTodo = this.onCreateTodo.bind(this)
         this.onDeleteTodo = this.onDeleteTodo.bind(this)
+        this.validateTodo = this.validateTodo.bind(this)
+        this.onTodoSave = this.onTodoSave.bind(this)
     }
 
     onCreateTodo(task) {
@@ -43,6 +45,44 @@ class App extends React.Component {
         this.setState({todos: this.state.todos.filter(todo => todo.id !== id)})
     }
 
+    validateTodo(newValue) {
+        if (typeof newValue !== 'string') {
+            return ['task must be a string']
+        }
+
+        if (newValue.length === 0) {
+            return ['task can not be empty']
+        }
+
+        if (this.checkIfTaskExists(newValue)) {
+            return ['given task already exists']
+        }
+
+        return []
+    }
+
+    onTodoSave(taskId, newValue) {
+        const errors = this.validateTodo(newValue);
+        if (errors.length) {
+            return errors
+        }
+
+        this.setState({
+            todos: this.state.todos.map(todo => {
+                todo.task = (todo.id === taskId ? newValue : todo.task)
+                return todo
+            })
+        })
+
+        return []
+    }
+
+    checkIfTaskExists(task) {
+        return this.state.todos
+            .filter(todo => todo.task === task)
+            .length > 0
+    }
+
     render() {
         return (
             <div>
@@ -51,6 +91,7 @@ class App extends React.Component {
                 <ToDosList
                     todos = {this.state.todos}
                     onDeleteItem = {this.onDeleteTodo}
+                    onTaskSave = {this.onTodoSave}
                 />
             </div>
         )

@@ -12,11 +12,22 @@ class ToDosList extends React.Component {
         }
     }
 
+    onTaskSave(taskId, newValue) {
+        const {onTaskSave} = this.props
+
+        if (onTaskSave) {
+            return onTaskSave(taskId, newValue)
+        }
+
+        return []
+    }
+
     renderItems() {
         return this.props.todos.map(todo => 
             <ToDosListItem
                 key = {todo.id}
                 onDeleteHandler = {this.onDeleteItem.bind(this)}
+                onSaveHandler = {this.onTaskSave.bind(this)}
                 {...todo}
             />
         )
@@ -38,7 +49,8 @@ class ToDosList extends React.Component {
 
 ToDosList.protoTypes - {
     todos: PropTypes.array.isRequired,
-    onDeleteItem: PropTypes.func
+    onDeleteItem: PropTypes.func,
+    onTaskSave: PropTypes.func
 }
 
 export default ToDosList
